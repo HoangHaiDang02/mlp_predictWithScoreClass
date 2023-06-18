@@ -1,13 +1,10 @@
 import pandas as pd
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score
 from sklearn.model_selection import KFold
 import tkinter as tk
 from tkinter import messagebox
-
-
-
 
 def result_predict(predict):
     result = ''
@@ -25,7 +22,7 @@ def result_predict(predict):
         result = 'D00'
     return result
 
-data = pd.read_csv('test_2.csv')
+data = pd.read_csv('./test_2.csv')
 
 # Chọn các cột đặc trưng
 features = ['toan1', 'ly1', 'hoa1', 'sinh1', 'van1', 'su1', 'dia1', 'anh1',
@@ -75,21 +72,16 @@ y_train_best, y_test_best = y[best_train_indices], y[best_test_indices]
 best_mlp = MLPClassifier(hidden_layer_sizes=500)
 best_mlp.fit(X_train_best, y_train_best)
 
-
 # # Dự đoán
 def predict_grade(scores):
     prediction = mlp.predict(scores)
     predicted_label = label_encoder.inverse_transform(prediction)
     return predicted_label[0]
 
-
-
-
-
 # Create the main window
 window = tk.Tk()
-window.title("Grade Prediction")
-window.geometry("1200x800")
+window.title("Du doan khoi thi THPTGQ")
+window.geometry("650x300")
 
 # Create input labels and entry fields
 tk.Label(window, text="Điểm toán lần 1:").grid(row=0, column=0)
@@ -238,58 +230,9 @@ def predict_grade_getText():
 predict_button = tk.Button(window, text="Dự đoán", command=predict_grade_getText)
 predict_button.grid(row=10, column=3, columnspan=2)
 
+tk.Label(window, text="Danh gia do do:").grid(row=11, column=3)
+tk.Label(window, text="Accuracy:").grid(row=12, column=3)
+tk.Label(window, text=f"{max_accuracy*100} %").grid(row=12, column=4)
+
 # Start the main event loop
 window.mainloop()
-
-
-
-
-
-
-
-
-# # Đánh giá mô hình tốt nhất trên dữ liệu kiểm tra
-# y_pred_best = best_mlp.predict(X_test_best)
-# classification_best = classification_report(y_test_best, y_pred_best)
-
-# print("Báo cáo phân loại mô hình tốt nhất:")
-# print(classification_best)
-
-
-# # Nhập dữ liệu và dự đoán
-# def get_valid_score(message):
-#     while True:
-#         try:
-#             score = float(input(message))
-#             if score < 0 or score > 10:
-#                 print("Điểm phải nằm trong khoảng từ 0 đến 10. Vui lòng nhập lại.")
-#             else:
-#                 return score
-#         except ValueError:
-#             print("Vui lòng nhập một số hợp lệ.")
-
-# toan1 = get_valid_score("Nhập điểm toán lần 1: ")
-# ly1 = get_valid_score("Nhập điểm lý lần 1: ")
-# hoa1 = get_valid_score("Nhập điểm hoá lần 1: ")
-# sinh1 = get_valid_score("Nhập điểm sinh lần 1: ")
-# van1 = get_valid_score("Nhập điểm văn lần 1: ")
-# su1 = get_valid_score("Nhập điểm sử lần 1: ")
-# dia1 = get_valid_score("Nhập điểm địa lần 1: ")
-# anh1 = get_valid_score("Nhập điểm anh lần 1: ")
-# toan2 = get_valid_score("Nhập điểm toán lần 2: ")
-# ly2 = get_valid_score("Nhập điểm lý lần 2: ")
-# hoa2 = get_valid_score("Nhập điểm hoá lần 2: ")
-# sinh2 = get_valid_score("Nhập điểm sinh lần 2: ")
-# van2 = get_valid_score("Nhập điểm văn lần 2: ")
-# su2 = get_valid_score("Nhập điểm sử lần 2: ")
-# dia2 = get_valid_score("Nhập điểm địa lần 2: ")
-# anh2 = get_valid_score("Nhập điểm anh lần 2: ")
-
-# # Tạo dữ liệu đầu vào
-# input_scores = [[toan1, ly1, hoa1, sinh1, van1, su1, dia1, anh1,
-#                  toan2, ly2, hoa2, sinh2, van2, su2, dia2, anh2]]
-
-
-# # Dự đoán kết quả
-# predicted_grade = predict_grade(input_scores)
-# print("Kết quả dự đoán: ", result_predict(predicted_grade))
