@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
 from sklearn.model_selection import KFold
 import tkinter as tk
 from tkinter import messagebox
@@ -41,11 +42,9 @@ kfold = KFold(n_splits=5, shuffle=False)
 # Tạo danh sách để lưu trữ độ chính xác từ từng fold
 accuracies = []
 
+
 # Lặp qua từng fold và huấn luyện/đánh giá mô hình
 for train_index, test_index in kfold.split(X,y):
-    print(train_index)
-    print('ok')
-    print(test_index)
     X_train, X_test = X.iloc[train_index], X.iloc[test_index]
     y_train, y_test = y[train_index], y[test_index]
 
@@ -72,8 +71,16 @@ best_train_indices, best_test_indices = list(kfold.split(X,y))[best_model_index]
 X_train_best, X_test_best = X.iloc[best_train_indices], X.iloc[best_test_indices]
 y_train_best, y_test_best = y[best_train_indices], y[best_test_indices]
 
+
+
 best_mlp = MLPClassifier(hidden_layer_sizes=500)
 best_mlp.fit(X_train_best, y_train_best)
+
+y_pred_best = best_mlp.predict(X_test_best)
+# Với average='weighted', precision được tính dựa trên trung bình có trọng số dựa trên số lượng mẫu trong từng lớp. Với average='macro', precision được tính bằng trung bình không có trọng số của precision từng lớp.
+precisions = precision_score(y_test_best, y_pred_best, average='weighted')
+print("Độ chính xác precisions:", precisions*100, "%")
+
 
 # # Dự đoán
 def predict_grade(scores):
@@ -218,6 +225,9 @@ predict_button.grid(row=10, column=3, columnspan=2)
 tk.Label(window, text="Danh gia do do:").grid(row=11, column=3)
 tk.Label(window, text="Accuracy:").grid(row=12, column=3)
 tk.Label(window, text=f"{max_accuracy*100} %").grid(row=12, column=4)
+
+tk.Label(window, text="Precision:").grid(row=13, column=3)
+tk.Label(window, text=f"{precisions*100} %").grid(row=13, column=4)
 
 # Start the main event loop
 window.mainloop()
