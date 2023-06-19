@@ -22,7 +22,7 @@ def result_predict(predict):
         result = 'D00'
     return result
 
-data = pd.read_csv('./test_2.csv')
+data = pd.read_csv('test_2.csv')
 
 # Chọn các cột đặc trưng
 features = ['toan1', 'ly1', 'hoa1', 'sinh1', 'van1', 'su1', 'dia1', 'anh1',
@@ -43,6 +43,9 @@ accuracies = []
 
 # Lặp qua từng fold và huấn luyện/đánh giá mô hình
 for train_index, test_index in kfold.split(X,y):
+    print(train_index)
+    print('ok')
+    print(test_index)
     X_train, X_test = X.iloc[train_index], X.iloc[test_index]
     y_train, y_test = y[train_index], y[test_index]
 
@@ -193,25 +196,7 @@ def predict_grade_getText():
     anh2 = float(anh2_entry.get())
 
     # Check if the input scores are within the valid range
-    if not (
-        (0 <= toan1 <= 10) or
-        (0 <= ly1 <= 10) or 
-        (0 <= hoa1 <= 10) or
-        (0 <= sinh1 <= 10) or
-        (0 <= van1 <= 10) or
-        (0 <= su1 <= 10) or
-        (0 <= dia1 <= 10) or
-        (0 <= anh1 <= 10) or
-
-        (0 <= toan2 <= 10) or
-        (0 <= ly2 <= 10) or 
-        (0 <= hoa2 <= 10) or
-        (0 <= sinh2 <= 10) or
-        (0 <= van2 <= 10) or
-        (0 <= su2 <= 10) or
-        (0 <= dia2 <= 10) or
-        (0 <= anh2 <= 10) 
-    ):
+    if not (0 <= toan1 <= 10) or not (0 <= ly1 <= 10) or not (0 <= hoa1 <= 10) or not (0 <= sinh1 <= 10) or not (0 <= van1 <= 10) or not (0 <= su1 <= 10) or not (0 <= dia1 <= 10) or not (0 <= anh1 <= 10) or not (0 <= toan2 <= 10) or not (0 <= ly2 <= 10) or not (0 <= hoa2 <= 10) or not (0 <= sinh2 <= 10) or not (0 <= van2 <= 10) or not (0 <= su2 <= 10) or not (0 <= dia2 <= 10) or not (0 <= anh2 <= 10): 
         messagebox.showwarning("Invalid Input", "Điểm phải nằm trong khoảng từ 0 đến 10.")
         return
 
